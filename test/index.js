@@ -18,7 +18,7 @@ describe('email', () => {
 
     describe('analyze()', () => {
 
-        it('identifies error', () => {
+        it('identifies error', (done) => {
 
             const tests = [
                 ['', 'Address must be a non-empty string'],
@@ -53,9 +53,11 @@ describe('email', () => {
 
                 expect(output.error).to.equal(result);
             }
+
+            done();
         });
 
-        it('validates options', () => {
+        it('validates options', (done) => {
 
             const tests = [
                 ['test@example.com', 'Invalid options: tlds must be a boolean or an object', { tlds: 1 }],
@@ -69,33 +71,38 @@ describe('email', () => {
                 const email = tests[i];
                 expect(() => Address.email.analyze(email[0], email[2])).to.throw(email[1]);
             }
+
+            done();
         });
 
         describe('validated TLD', () => {
 
-            it('applies built-in list', () => {
+            it('applies built-in list', (done) => {
 
                 expect(Address.email.analyze('test@example.com')).to.not.exist();
                 expect(Address.email.analyze('test@example.com', { tlds: true })).to.not.exist();
                 expect(Address.email.analyze('test@example.com', { tlds: { allow: true } })).to.not.exist();
+                done();
             });
 
-            it('ignores built-in list', () => {
+            it('ignores built-in list', (done) => {
 
                 expect(Address.email.analyze('test@example.invalid-top', { tlds: false })).to.not.exist();
+                done();
             });
 
-            it('denies listed tls', () => {
+            it('denies listed tls', (done) => {
 
                 expect(Address.email.analyze('test@example.com', { tlds: { deny: new Set(['test']) } })).to.not.exist();
                 expect(Address.email.analyze('test@example.com', { tlds: { deny: new Set(['com']) } })).to.equal({ error: 'Domain uses forbidden TLD' });
+                done();
             });
         });
     });
 
     describe('isValid()', () => {
 
-        it('validates email', () => {
+        it('validates email', (done) => {
 
             // Tests adapted from https://github.com/hapijs/isemail
             // Copyright (c) 2008-2019, Eli Skeggs, Dominic Sayers, GlobeSherpa
@@ -340,6 +347,8 @@ describe('email', () => {
 
                 expect(valid).to.equal(result);
             }
+
+            done();
         });
     });
 });
@@ -348,7 +357,7 @@ describe('domain', () => {
 
     describe('analyze()', () => {
 
-        it('identifies error', () => {
+        it('identifies error', (done) => {
 
             const tests = [
                 ['', 'Domain must be a non-empty string'],
@@ -375,12 +384,14 @@ describe('domain', () => {
 
                 expect(output.error).to.equal(result);
             }
+
+            done();
         });
     });
 
     describe('isValid()', () => {
 
-        it('validates domain', () => {
+        it('validates domain', (done) => {
 
             const tests = [
                 ['\r', false],
@@ -412,6 +423,8 @@ describe('domain', () => {
 
                 expect(valid).to.equal(result);
             }
+
+            done();
         });
     });
 });

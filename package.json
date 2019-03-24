@@ -1,7 +1,7 @@
 {
-  "name": "@hapi/address",
+  "name": "@commercial/address",
   "description": "Email address and domain validation",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "repository": "git://github.com/hapijs/address",
   "main": "lib/index.js",
   "keywords": [
@@ -12,12 +12,12 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "code": "5.x.x",
-    "lab": "18.x.x"
+    "code": "4.x.x",
+    "lab": "14.x.x"
   },
   "scripts": {
-    "test": "lab -a code -t 100 -L",
-    "test-cov-html": "lab -a code -t 100 -L -r html -o coverage.html"
+    "test": "lab -a code -t 100 -L -l",
+    "test-cov-html": "lab -a code -t 100 -L -r html -o coverage.html -l"
   },
-  "license": "BSD-3-Clause"
+  "license": "SEE LICENSE IN LICENSE.md"
 }
