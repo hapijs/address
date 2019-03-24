@@ -1,2 +1,4 @@
-# email
-Validate email addresses
+# address
+
+Validate email address and domain
+
