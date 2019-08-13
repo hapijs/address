@@ -2,9 +2,9 @@
 
 const Punycode = require('punycode');
 
-const Code = require('code');
+const Code = require('@hapi/code');
 const Address = require('..');
-const Lab = require('lab');
+const Lab = require('@hapi/lab');
 
 
 const internals = {};
