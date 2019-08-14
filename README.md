@@ -4,4 +4,4 @@
 
 Validate email address and domain
 
-[![Build Status](https://secure.travis-ci.org/hapijs/address.svg)](http://travis-ci.org/hapijs/address)
+[![Build Status](https://secure.travis-ci.org/hapijs/address.svg)](http://travis-ci.org/hapijs/address) [![Greenkeeper badge](https://badges.greenkeeper.io/hapijs/address.svg)](https://greenkeeper.io/)
