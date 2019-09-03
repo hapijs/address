@@ -321,7 +321,8 @@ describe('email', () => {
                 ['shouldbe@XN--UNUP4Y', true, { minDomainSegments: 1 }],
                 ['shouldbe@xn--unup4y', true, { minDomainSegments: 1 }],
                 ['shouldbe@\u6e38\u620f', true, { minDomainSegments: 1 }],
-                ['æøå', false]
+                ['æøå', false],
+                ['1234567890abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw@xyz.com', true, { ignoreLength: true }]
             ];
 
             for (let i = 0; i < tests.length; ++i) {
