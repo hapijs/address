@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 const Punycode = require('punycode');
 
@@ -15,6 +15,11 @@ const expect = Code.expect;
 
 
 describe('email', () => {
+
+    it('available as direct require', () => {
+
+        expect(require('../lib/email').isValid('test@example.com')).to.be.true();
+    });
 
     describe('analyze()', () => {
 
@@ -62,7 +67,7 @@ describe('email', () => {
                 ['test@example.com', 'Invalid options: tlds.allow must be a Set object or true', { tlds: { allow: ['test'] } }],
                 ['test@example.com', 'Invalid options: tlds.deny must be a Set object', { tlds: { deny: ['test'] } }],
                 ['test@example.com', 'Invalid options: cannot specify both tlds.allow and tlds.deny lists', { tlds: { allow: new Set(), deny: new Set() } }],
-                [1, 'Invalid input: value must be a string']
+                [1, 'Invalid input: email must be a string']
             ];
 
             for (let i = 0; i < tests.length; ++i) {
@@ -348,6 +353,11 @@ describe('email', () => {
 
 describe('domain', () => {
 
+    it('available as direct require', () => {
+
+        expect(require('../lib/domain').isValid('example.com')).to.be.true();
+    });
+
     describe('analyze()', () => {
 
         it('identifies error', () => {
@@ -376,6 +386,22 @@ describe('domain', () => {
                 }
 
                 expect(output.error).to.equal(result);
+            }
+        });
+
+        it('validates options', () => {
+
+            const tests = [
+                ['example.com', 'Invalid options: tlds must be a boolean or an object', { tlds: 1 }],
+                ['example.com', 'Invalid options: tlds.allow must be a Set object or true', { tlds: { allow: ['test'] } }],
+                ['example.com', 'Invalid options: tlds.deny must be a Set object', { tlds: { deny: ['test'] } }],
+                ['example.com', 'Invalid options: cannot specify both tlds.allow and tlds.deny lists', { tlds: { allow: new Set(), deny: new Set() } }],
+                [1, 'Invalid input: domain must be a string']
+            ];
+
+            for (let i = 0; i < tests.length; ++i) {
+                const domain = tests[i];
+                expect(() => Address.domain.analyze(domain[0], domain[2])).to.throw(domain[1]);
             }
         });
     });
