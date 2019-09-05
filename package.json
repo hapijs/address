@@ -1,7 +1,7 @@
 {
   "name": "@hapi/address",
   "description": "Email address and domain validation",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "repository": "git://github.com/hapijs/address",
   "main": "lib/index.js",
   "keywords": [
