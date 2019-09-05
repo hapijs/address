@@ -310,7 +310,6 @@ describe('email', () => {
                 ['\"\\\ud800\"@invalid', false],
                 ['(\ud800)thing@invalid', false],
                 ['\"\\\ud800\"@invalid', false],
-                ['test@\ud800\udfffñoñó郵件ñoñó郵件.郵件ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.noñó郵件.商務', false, { tlds: { allow: new Set([Punycode.toASCII('商務')]) } }],
                 ['test@\ud800\udfffñoñó郵件ñoñó郵件.郵件ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.noñó郵件ñoñó郵.商務', false, { tlds: { allow: new Set([Punycode.toASCII('商務')]) } }],
                 ['test@\ud800\udfffñoñó郵件ñoñó郵件.郵件ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.ñoñó郵件ñoñó郵件.oñó郵件ñoñó郵件ñoñó郵件.商務', false, { tlds: { allow: new Set([Punycode.toASCII('商務')]) } }],
                 ['test@ñoñoñó郵件\ud83d\ude06ñoñ.oñó郵件\uc138ñoñ.oñó郵件\u0644\u4eec\u010dñoñoñó郵件\u05dcño.ñoñó郵件\u092f\u672cñoñoñó郵件\uc138añoñ.oñó郵件\ud83d\ude06bc\uc138郵\ud83d\ude06ño.ñoñó郵件ñoñoñó郵件\ud83d\ude06ñoñoñó郵件\uc138ñoñ.oñó郵件\u0644\u4eecñoñoñó.郵件\ud83d\ude06ñoñoñó郵件郵\uc138ñoñoñó郵件\u0644\u4eecñoñoñó郵件.\ud83d\ude06ñoñoñó郵件郵\uc138\u0644\u4eec.郵件\ud83d\ude06ñoñoñó郵.件郵\uc138\u4eec\ud83d\ude06ñoñoñó件郵\uc138ñoñoñó郵件', false, { tlds: { allow: new Set([Punycode.toASCII('商務')]) } }],
