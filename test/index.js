@@ -31,7 +31,7 @@ describe('email', () => {
                 ['test@test@test', 'Address cannot contain more than one @ character'],
                 ['test', 'Address must contain one @ character'],
                 ['@example.com', 'Address local part cannot be empty'],
-                ['test@', 'Domain cannot be empty'],
+                ['test@', 'Domain must be a non-empty string'],
                 ['1234567890@abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz.com', 'Address too long'],
                 ['1234567890123456789012345678901234567890123456789012345678901234567890@example.com', 'Address local part too long'],
                 ['x..y@example.com', 'Address local part contains empty dot-separated segment'],
