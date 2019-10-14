@@ -111,3 +111,5 @@ expect.error(Address.email.isValid('test@example.com', { tlds: { allow: 'com' } 
 expect.error(Address.email.isValid('test@example.com', { tlds: { allow: new Set<number>() } }));
 expect.error(Address.email.isValid('test@example.com', { tlds: { deny: 'com' } }));
 expect.error(Address.email.isValid('test@example.com', { tlds: { deny: new Set<number>() } }));
+
+expect.type<string>(Address.errors.errorsByCode.BE_STRING);

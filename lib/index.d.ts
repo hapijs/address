@@ -98,3 +98,7 @@ export interface Analysis {
      */
     error: string;
 }
+
+export namespace errors {
+    const errorsByCode: {readonly [k: string]: string}
+}
