@@ -41,9 +41,12 @@ Analyzes a string to verify it is a valid email address where:
 If the `email` is valid, no return value. If the `email` is invalid, an object is returned with:
 - `error` - a string containing the reason the email is invalid.
 
-
 ### `email.isValid(email, [options])`
 
 Validates a string to verify it is a valid email address where:
 - `email` - the email address string being verified.
 - `options` - same options as [`email.analyze()`](#emailanalyzeemail-options).
+
+### `errors`
+
+An object containing a key per error code with a matching string value description.

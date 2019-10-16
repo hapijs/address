@@ -6,7 +6,6 @@ const Code = require('@hapi/code');
 const Address = require('..');
 const Lab = require('@hapi/lab');
 
-const errorsByCode = require('../lib/errors').errorsByCode;
 
 const internals = {};
 
@@ -58,7 +57,7 @@ describe('email', () => {
                 }
 
                 expect(output.error).to.equal(result);
-                expect(errorsByCode[output.code]).to.equal(output.error);
+                expect(Address.errors[output.code]).to.equal(output.error);
             }
         });
 
@@ -388,7 +387,7 @@ describe('domain', () => {
                 }
 
                 expect(output.error).to.equal(result);
-                expect(errorsByCode[output.code]).to.equal(output.error);
+                expect(Address.errors[output.code]).to.equal(output.error);
             }
         });
 

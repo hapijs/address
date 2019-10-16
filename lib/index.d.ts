@@ -97,8 +97,12 @@ export interface Analysis {
      * The reason validation failed.
      */
     error: string;
+
+    /**
+     * The error code.
+     */
+    code: string;
 }
 
-export namespace errors {
-    const errorsByCode: {readonly [k: string]: string}
-}
+
+export const errors: Record<string, string>;
