@@ -6,6 +6,7 @@ const Code = require('@hapi/code');
 const Address = require('..');
 const Lab = require('@hapi/lab');
 
+const errorsByCode = require('../lib/errors').errorsByCode;
 
 const internals = {};
 
@@ -57,6 +58,7 @@ describe('email', () => {
                 }
 
                 expect(output.error).to.equal(result);
+                expect(errorsByCode[output.code]).to.equal(output.error);
             }
         });
 
@@ -92,8 +94,9 @@ describe('email', () => {
 
             it('denies listed tls', () => {
 
+                const expectedError = { error: 'Domain uses forbidden TLD', code: 'DOMAIN_FORBIDDEN_TLDS' };
                 expect(Address.email.analyze('test@example.com', { tlds: { deny: new Set(['test']) } })).to.not.exist();
-                expect(Address.email.analyze('test@example.com', { tlds: { deny: new Set(['com']) } })).to.equal({ error: 'Domain uses forbidden TLD' });
+                expect(Address.email.analyze('test@example.com', { tlds: { deny: new Set(['com']) } })).to.equal(expectedError);
             });
         });
     });
@@ -385,6 +388,7 @@ describe('domain', () => {
                 }
 
                 expect(output.error).to.equal(result);
+                expect(errorsByCode[output.code]).to.equal(output.error);
             }
         });
 
