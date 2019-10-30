@@ -174,6 +174,15 @@ export namespace ip {
 export namespace uri {
 
     /**
+     * Faster version of decodeURIComponent() that does not throw.
+     * 
+     * @param string - the URL string to decode.
+     * 
+     * @returns the decoded string or null if invalid.
+     */
+    function decode(string: string): string | null;
+
+    /**
      * Generates a regular expression used to validate URI addresses.
      *
      * @param options - optional settings.

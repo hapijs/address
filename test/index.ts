@@ -137,6 +137,16 @@ expect.error(Address.ip.regex({ version: 'x' }));
 expect.error(Address.ip.regex({ version: ['x'] }));
 
 
+// uri.decode()
+
+Address.uri.decode('%25a%25');
+
+expect.type<string | null>(Address.uri.decode(''));
+
+expect.error(Address.uri.decode());
+expect.error(Address.uri.decode(123));
+
+
 // uri.regex()
 
 Address.uri.regex();

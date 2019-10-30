@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 const Address = require('..');
 const Code = require('@hapi/code');
