@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 import * as Hoek from '@hapi/hoek';
 
 
