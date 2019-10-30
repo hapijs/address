@@ -1,3 +1,6 @@
+import * as Hoek from '@hapi/hoek';
+
+
 export namespace domain {
 
     /**
@@ -47,10 +50,12 @@ export namespace domain {
     namespace Tlds {
 
         interface Allow {
+
             readonly allow: Set<string> | true;
         }
 
         interface Deny {
+
             readonly deny: Set<string>;
         }
     }
@@ -106,3 +111,134 @@ export interface Analysis {
 
 
 export const errors: Record<string, string>;
+
+
+export namespace ip {
+
+    /**
+     * Generates a regular expression used to validate IP addresses.
+     * 
+     * @param options - optional settings.
+     * 
+     * @returns an object with the regular expression and meta data.
+     */
+    function regex(options?: Options): Expression;
+
+    interface Options {
+
+        /**
+         * The required CIDR mode.
+         * 
+         * @default 'optional'
+         */
+        readonly cidr?: Cidr;
+
+        /**
+         * The allowed versions.
+         * 
+         * @default ['ipv4', 'ipv6', 'ipvfuture']
+         */
+        readonly version?: Version | Version[];
+    }
+
+    type Cidr = 'optional' | 'required' | 'forbidden';
+    type Version = 'ipv4' | 'ipv6' | 'ipvfuture';
+
+    interface Expression {
+
+        /**
+         * The CIDR mode.
+         */
+        cidr: Cidr;
+
+        /**
+         * The raw regular expression string.
+         */
+        raw: string;
+
+        /**
+         * The regular expression.
+         */
+        regex: RegExp;
+
+        /**
+         * The array of versions allowed.
+         */
+        versions: Version[];
+    }
+}
+
+
+export namespace uri {
+
+    /**
+     * Generates a regular expression used to validate URI addresses.
+     *
+     * @param options - optional settings.
+     *
+     * @returns an object with the regular expression and meta data.
+     */
+    function regex(options?: Options): Expression;
+
+    type Options = Hoek.ts.XOR<Options.Options, Options.Relative>;
+
+    namespace Options {
+
+        interface Query {
+
+            /**
+             * Allow the use of [] in query parameters.
+             * 
+             * @default false
+             */
+            readonly allowQuerySquareBrackets?: boolean;
+        }
+
+        interface Relative extends Query {
+
+            /**
+             * Requires the URI to be relative.
+             * 
+             * @default false
+             */
+            readonly relativeOnly?: boolean;
+        }
+
+        interface Options extends Query {
+
+            /**
+             * Allow relative URIs.
+             * 
+             * @default false
+             */
+            readonly allowRelative?: boolean;
+
+            /**
+             * Capture domain segment ($1).
+             * 
+             * @default false
+             */
+            readonly domain?: boolean;
+
+            /**
+             * The allowed URI schemes.
+             */
+            readonly scheme?: Scheme | Scheme[];
+        }
+
+        type Scheme = string | RegExp;
+    }
+
+    interface Expression {
+
+        /**
+         * The raw regular expression string.
+         */
+        raw: string;
+
+        /**
+         * The regular expression.
+         */
+        regex: RegExp;
+    }
+}

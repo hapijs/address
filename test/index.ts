@@ -116,3 +116,39 @@ expect.error(Address.email.isValid('test@example.com', { tlds: { allow: 'com' } 
 expect.error(Address.email.isValid('test@example.com', { tlds: { allow: new Set<number>() } }));
 expect.error(Address.email.isValid('test@example.com', { tlds: { deny: 'com' } }));
 expect.error(Address.email.isValid('test@example.com', { tlds: { deny: new Set<number>() } }));
+
+
+// ip.regex()
+
+Address.ip.regex();
+Address.ip.regex({ cidr: 'required', version: 'ipv4' });
+Address.ip.regex({ cidr: 'optional', version: ['ipv6'] });
+
+expect.type<Address.ip.Expression>(Address.ip.regex());
+expect.type<Address.ip.Cidr>(Address.ip.regex().cidr);
+expect.type<Address.ip.Version[]>(Address.ip.regex().versions);
+expect.type<RegExp>(Address.ip.regex().regex);
+expect.type<string>(Address.ip.regex().raw);
+
+expect.error(Address.ip.regex(1));
+expect.error(Address.ip.regex({ x: 123 }));
+expect.error(Address.ip.regex({ cidr: 'option' }));
+expect.error(Address.ip.regex({ version: 'x' }));
+expect.error(Address.ip.regex({ version: ['x'] }));
+
+
+// uri.regex()
+
+Address.uri.regex();
+Address.uri.regex({ allowQuerySquareBrackets: true, relativeOnly: true });
+Address.uri.regex({ allowQuerySquareBrackets: true, allowRelative: true, domain: true, scheme: ['http', /https/] });
+
+expect.type<Address.uri.Expression>(Address.ip.regex());
+expect.type<RegExp>(Address.uri.regex().regex);
+expect.type<string>(Address.uri.regex().raw);
+
+expect.error(Address.uri.regex(1));
+expect.error(Address.uri.regex({ x: 123 }));
+expect.error(Address.uri.regex({ relativeOnly: true, domain: true }));
+expect.error(Address.uri.regex({ scheme: 1 }));
+expect.error(Address.uri.regex({ scheme: [1] }));
