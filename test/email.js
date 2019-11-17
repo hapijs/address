@@ -88,9 +88,8 @@ describe('email', () => {
 
             it('denies listed tls', () => {
 
-                const expectedError = { error: 'Domain uses forbidden TLD', code: 'DOMAIN_FORBIDDEN_TLDS' };
                 expect(Address.email.analyze('test@example.com', { tlds: { deny: new Set(['test']) } })).to.not.exist();
-                expect(Address.email.analyze('test@example.com', { tlds: { deny: new Set(['com']) } })).to.equal(expectedError);
+                expect(Address.email.analyze('test@example.com', { tlds: { deny: new Set(['com']) } })).to.equal({ error: 'Domain uses forbidden TLD', code: 'DOMAIN_FORBIDDEN_TLDS' });
             });
         });
     });
@@ -99,7 +98,7 @@ describe('email', () => {
 
         it('validates email', () => {
 
-            // Tests adapted from https://github.com/hapijs/isemail
+            // Tests adapted from https://github.com/skeggse/isemail
             // Copyright (c) 2008-2019, Eli Skeggs, Dominic Sayers, GlobeSherpa
 
             const tests = [
@@ -323,7 +322,10 @@ describe('email', () => {
                 ['shouldbe@xn--unup4y', true, { minDomainSegments: 1 }],
                 ['shouldbe@\u6e38\u620f', true, { minDomainSegments: 1 }],
                 ['æøå', false],
-                ['1234567890abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw@xyz.com', true, { ignoreLength: true }]
+                ['1234567890abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw@xyz.com', true, { ignoreLength: true }],
+                ['test@example.com@example.com', false],
+                ['test@example.com/path', false],
+                ['test@example.com:123', false]
             ];
 
             for (let i = 0; i < tests.length; ++i) {

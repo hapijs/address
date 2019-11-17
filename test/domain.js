@@ -80,7 +80,10 @@ describe('domain', () => {
                 ['iana.123', false],
                 ['255.255.255.255', false],
                 ['XN--UNUP4Y', true, { minDomainSegments: 1 }],
-                ['test@example.com', false]
+                ['test@example.com', false],
+                ['test:example.com', false],
+                ['example.com:123', false],
+                ['example.com/path', false]
             ];
 
             for (let i = 0; i < tests.length; ++i) {
