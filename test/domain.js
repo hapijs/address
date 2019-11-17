@@ -79,7 +79,8 @@ describe('domain', () => {
                 ['x.商務', true, { tlds: { allow: new Set([Punycode.toASCII('商務')]) } }],
                 ['iana.123', false],
                 ['255.255.255.255', false],
-                ['XN--UNUP4Y', true, { minDomainSegments: 1 }]
+                ['XN--UNUP4Y', true, { minDomainSegments: 1 }],
+                ['test@example.com', false]
             ];
 
             for (let i = 0; i < tests.length; ++i) {
