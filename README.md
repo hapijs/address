@@ -4,7 +4,7 @@
 
 #### Validate email address and domain.
 
-**address** is part of the **hapi** ecosystem and was designed to work seamlessly with the [hapi web framework](https://hapi.dev) and its other components (but works great on its own or with other frameworks). If you are using a different web framework and find this module useful, check out [hapi](https://hapi.dev) – they work even better together.
+**address** is part of the **hapi** ecosystem and was designed to work seamlessly with the [hapi web framework](https://hapi.dev) and its other components (but works great on its own or with other frameworks). If you are using a different web framework and find this module useful, check out [hapi](https://hapi.dev) â€“ they work even better together.
 
 ### Visit the [hapi.dev](https://hapi.dev) Developer Portal for tutorials, documentation, and support
 
@@ -12,5 +12,6 @@
 
 - [Documentation and API](https://hapi.dev/family/address/)
 - [Versions status](https://hapi.dev/resources/status/#address)
-- [Project policies](https://hapi.dev/policies/)
+- [Changelog](https://hapi.dev/family/accept/changelog/)
+- [Project policies](https://hapi.dev/family/address/changelog/)
 - [Free and commercial support options](https://hapi.dev/support/)
