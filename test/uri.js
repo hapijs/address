@@ -144,7 +144,8 @@ describe('uri', () => {
             ['//username:password@test.example.com/one/two/three?value=abc&value2=123#david-rules', false],
             ['http://a\r" \t\n<\'b:b@c\r\nd/e?f', false],
             ['/absolute', false],
-            ['mongodb://a.example.com,b.example.com/db?replicaSet=s', true]
+            ['mongodb://a.example.com,b.example.com/db?replicaSet=s', true],
+            ['mongodb://a.x.com,b.x.com:21017,c.x.com:21018,d.x.com/db?replicaSet=s', true]
         ]);
     });
 
@@ -405,7 +406,8 @@ describe('uri', () => {
 
         const tests = [
             ['https://example.com:3000/pathname?query=string#hash', 'example.com'],
-            ['mongodb://a.example.com,b.example.com/db?replicaSet=s', 'a.example.com,b.example.com']
+            ['mongodb://a.example.com,b.example.com/db?replicaSet=s', 'a.example.com,b.example.com'],
+            ['mongodb://a.x.com,b.x.com:21017,c.x.com:21018,d.x.com/db?replicaSet=s', 'a.x.com,b.x.com']
         ];
 
         for (let i = 0; i < tests.length; ++i) {
