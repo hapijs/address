@@ -400,6 +400,46 @@ describe('uri', () => {
 
     it('captures domain', () => {
 
-        expect(Address.uri.regex({ domain: true }).raw).to.contain('@)?((?:');
+        const { raw, regex } = Address.uri.regex({ domain: true });
+        expect(raw).to.contain('@)?((?:');
+
+        const tests = [
+            ['https://example.com:3000/pathname?query=string#hash', 'example.com'],
+            ['mongodb://a.example.com,b.example.com/db?replicaSet=s', 'a.example.com,b.example.com']
+        ];
+
+        for (let i = 0; i < tests.length; ++i) {
+            const test = tests[i];
+            const [uri, pass] = test;
+            const found = uri.match(regex);
+
+            if (found === null) {
+                console.log(i, uri);
+            }
+
+            expect(found).not.to.equal(null);
+
+            if (found[0] !== uri) {
+                console.log(i, uri, [...found]);
+            }
+
+            expect(found.length).to.equal(2);
+
+            if (found.length !== 2) {
+                console.log(i, uri, [...found]);
+            }
+
+            if (found[0] !== uri) {
+                console.log(i, uri, [...found]);
+            }
+
+            expect(found[0]).to.equal(uri);
+
+            if (found[1] !== pass) {
+                console.log(i, uri, [...found]);
+            }
+
+            expect(found[1]).to.equal(pass);
+        }
     });
 });
