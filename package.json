@@ -1,5 +1,5 @@
 {
-  "name": "@hapi/address",
+  "name": "@commercial/address",
   "description": "Email address and domain validation",
   "version": "2.1.4",
   "repository": "git://github.com/hapijs/address",
