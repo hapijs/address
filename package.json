@@ -3,6 +3,9 @@
   "description": "Email address and domain validation",
   "version": "2.1.4",
   "repository": "git://github.com/hapijs/address",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "main": "lib/index.js",
   "keywords": [
     "email",
