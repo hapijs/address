@@ -1,8 +1,8 @@
 {
-    "name": "@hapi/address",
+    "name": "@sideway/address",
     "description": "Email address and domain validation",
     "version": "4.1.0",
-    "repository": "git://github.com/hapijs/address",
+    "repository": "git://github.com/sideway/address",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "files": [
@@ -18,8 +18,9 @@
         "@hapi/hoek": "^9.0.0"
     },
     "devDependencies": {
+        "typescript": "4.0.x",
         "@hapi/code": "8.x.x",
-        "@hapi/lab": "22.x.x"
+        "@hapi/lab": "24.x.x"
     },
     "scripts": {
         "test": "lab -a @hapi/code -t 100 -L -Y",
