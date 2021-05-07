@@ -37,7 +37,9 @@ describe('email', () => {
                 ['test@example..com', 'Domain contains empty dot-separated segment'],
                 ['test@1234567890123456789012345678901234567890123456789012345678901234567890.com', 'Domain contains dot-separated segment that is too long'],
                 ['test@example+.com', 'Domain contains invalid character', { tlds: false }],
-                ['test@example.com_', 'Domain contains invalid tld character', { tlds: false }]
+                ['test@example.com_', 'Domain contains invalid tld character', { tlds: false }],
+                ['test@example.com\\', 'Domain contains invalid tld character', { tlds: false }],
+                ['test@example.com#', 'Domain contains invalid tld character', { tlds: false }]
             ];
 
             for (let i = 0; i < tests.length; ++i) {
@@ -325,7 +327,12 @@ describe('email', () => {
                 ['1234567890abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvw@xyz.com', true, { ignoreLength: true }],
                 ['test@example.com@example.com', false],
                 ['test@example.com/path', false],
-                ['test@example.com:123', false]
+                ['test@example.com:123', false],
+                ['test@example.com_', false],
+                ['test@example.com\\', false],
+                ['test@example.com\\\\', false],
+                ['test@example.com#', false],
+                ['test@example.com##', false]
             ];
 
             for (let i = 0; i < tests.length; ++i) {
