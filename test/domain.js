@@ -86,7 +86,14 @@ describe('domain', () => {
                 ['example.com:123', false],
                 ['example.com/path', false],
                 ['x.example.com', false, { maxDomainSegments: 2 }],
-                ['x.example.com', true, { maxDomainSegments: 3 }]
+                ['x.example.com', true, { maxDomainSegments: 3 }],
+                ['example.com/', false],
+                ['example.com\\', false],
+                ['example.com?', false],
+                ['example.com#', false],
+                ['example.com:', false],
+                ['example.com&', false],
+                ['example.com|', false]
             ];
 
             for (let i = 0; i < tests.length; ++i) {

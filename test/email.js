@@ -38,8 +38,8 @@ describe('email', () => {
                 ['test@1234567890123456789012345678901234567890123456789012345678901234567890.com', 'Domain contains dot-separated segment that is too long'],
                 ['test@example+.com', 'Domain contains invalid character', { tlds: false }],
                 ['test@example.com_', 'Domain contains invalid tld character', { tlds: false }],
-                ['test@example.com\\', 'Domain contains invalid tld character', { tlds: false }],
-                ['test@example.com#', 'Domain contains invalid tld character', { tlds: false }]
+                ['test@example.com\\', 'Domain contains invalid character', { tlds: false }],
+                ['test@example.com#', 'Domain contains invalid character', { tlds: false }]
             ];
 
             for (let i = 0; i < tests.length; ++i) {
