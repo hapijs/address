@@ -133,6 +133,7 @@ describe('uri', () => {
             ['http://a/', true],
             ['http://a/g', true],
             ['http://a/g', true],
+            ['http:///a/g', false],
             ['file:/asda', true],
             ['qwerty', false],
             ['invalid uri', false],

@@ -93,7 +93,11 @@ describe('domain', () => {
                 ['example.com#', false],
                 ['example.com:', false],
                 ['example.com&', false],
-                ['example.com|', false]
+                ['example.com|', false],
+                ['example.com%2e', false],
+                ['example.com.', false],
+                ['example.com.', true, { allowFullyQualified: true }],
+                ['example.com', true, { allowFullyQualified: true }]
             ];
 
             for (let i = 0; i < tests.length; ++i) {
