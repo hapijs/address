@@ -63,6 +63,12 @@ describe('domain', () => {
                 expect(() => Address.domain.analyze(domain[0], domain[2])).to.throw(domain[1]);
             }
         });
+
+        it('does not throw on null', () => {
+
+            expect(() => Address.domain.analyze(null)).to.not.throw();
+            expect(() => Address.domain.analyze(undefined)).to.not.throw();
+        });
     });
 
     describe('isValid()', () => {

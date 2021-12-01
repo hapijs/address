@@ -144,7 +144,9 @@ describe('uri', () => {
             ['one/two/three?value=abc&value2=123#david-rules', false],
             ['//username:password@test.example.com/one/two/three?value=abc&value2=123#david-rules', false],
             ['http://a\r" \t\n<\'b:b@c\r\nd/e?f', false],
-            ['/absolute', false]
+            ['/absolute', false],
+            ['http:/example.com', false],
+            ['http:example.com', false]
         ]);
     });
 
