@@ -14,11 +14,14 @@
         "address",
         "validation"
     ],
+    "engines": {
+        "node": ">=14.0.0"
+    },
     "dependencies": {
-        "@hapi/hoek": "^9.0.0"
+        "@hapi/hoek": "^10.0.0"
     },
     "devDependencies": {
-        "typescript": "4.0.x",
+        "typescript": "4.6.x",
         "@hapi/code": "8.x.x",
         "@hapi/lab": "24.x.x"
     },
