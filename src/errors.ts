@@ -1,6 +1,4 @@
-'use strict';
-
-exports.codes = {
+export const errorCodes: Record<string, string> = {
     EMPTY_STRING: 'Address must be a non-empty string',
     FORBIDDEN_UNICODE: 'Address contains forbidden Unicode characters',
     MULTIPLE_AT_CHAR: 'Address cannot contain more than one @ character',
@@ -22,8 +20,6 @@ exports.codes = {
     DOMAIN_LONG_SEGMENT: 'Domain contains dot-separated segment that is too long'
 };
 
-
-exports.code = function (code) {
-
-    return { code, error: exports.codes[code] };
-};
+export function errorCode(code: string) {
+    return { code, error: errorCodes[code] };
+}

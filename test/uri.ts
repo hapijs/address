@@ -1,27 +1,17 @@
-'use strict';
+import { expect } from '@hapi/code';
+import * as Lab from '@hapi/lab';
 
-const Address = require('..');
-const Code = require('@hapi/code');
-const Lab = require('@hapi/lab');
+import { uriRegex } from '../src';
 
-
-const internals = {};
-
-
-const { describe, it } = exports.lab = Lab.script();
-const expect = Code.expect;
-
+const { describe, it } = (exports.lab = Lab.script());
 
 // Tests adapted from:
 // - https://github.com/joyent/node/blob/cfcb1de130867197cbc9c6012b7e84e08e53d032/test/simple/test-url.js
 // - RFC 8936: http://tools.ietf.org/html/rfc3986#page-7
 
-
 describe('uri', () => {
-
     const validate = (options, tests) => {
-
-        const { regex } = Address.uri.regex(options);
+        const { regex } = uriRegex(options);
 
         for (let i = 0; i < tests.length; ++i) {
             const test = tests[i];
@@ -37,7 +27,6 @@ describe('uri', () => {
     };
 
     it('validates uri', () => {
-
         validate({}, [
             ['foo://example.com:8042/over/there?name=ferret#nose', true],
             ['https://example.com?abc[]=123&abc[]=456', false],
@@ -54,11 +43,11 @@ describe('uri', () => {
             ['file:///example.txt', true],
             ['http://asdf:qw%20er@localhost:8000?asdf=12345&asda=fc%2F#bacon', true],
             ['http://asdf@localhost:8000', true],
-            ['http://[v1.09azAZ-._~!$&\'()*+,;=:]', true],
+            ["http://[v1.09azAZ-._~!$&'()*+,;=:]", true],
             ['http://[a:b:c:d:e::1.2.3.4]', true],
             ['coap://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]', true],
             ['http://[1080:0:0:0:8:800:200C:417A]', true],
-            ['http://v1.09azAZ-._~!$&\'()*+,;=:', true],            // The `v1.09azAZ-._~!$&\'()*+,;=` part is a valid registered name as it has no invalid characters
+            ["http://v1.09azAZ-._~!$&'()*+,;=:", true], // The `v1.09azAZ-._~!$&\'()*+,;=` part is a valid registered name as it has no invalid characters
             ['http://a:b:c:d:e::1.2.3.4', false],
             ['coap://FEDC:BA98:7654:3210:FEDC:BA98:7654:3210', false],
             ['http://1080:0:0:0:8:800:200C:417A', false],
@@ -70,7 +59,7 @@ describe('uri', () => {
             ['file:///whatever', true],
             ['mailto:asdf@asdf.com', true],
             ['ftp://www.example.com', true],
-            ['javascript:alert(\'hello\');', true],                                             // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", true], // eslint-disable-line no-script-url
             ['xmpp:isaacschlueter@jabber.org', true],
             ['f://some.host/path', true],
             ['http://localhost:18/asdf', true],
@@ -102,7 +91,7 @@ describe('uri', () => {
             ['dash-test://foo/bar', true],
             ['xmpp:isaacschlueter@jabber.org', true],
             ['http://atpass:foo%40bar@127.0.0.1:8080/path?search=foo#bar', true],
-            ['javascript:alert(\'hello\');', true],                                             // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", true], // eslint-disable-line no-script-url
             ['file://localhost/etc/node/', true],
             ['file:///etc/node/', true],
             ['http://USER:PW@www.ExAmPlE.com/', true],
@@ -151,7 +140,6 @@ describe('uri', () => {
     });
 
     it('validates uri with a single scheme provided', () => {
-
         validate({ scheme: 'http' }, [
             ['http://google.com', true],
             ['https://google.com', false],
@@ -162,7 +150,6 @@ describe('uri', () => {
     });
 
     it('validates uri with a single regex scheme provided', () => {
-
         validate({ scheme: /https?/ }, [
             ['http://google.com', true],
             ['https://google.com', true],
@@ -173,7 +160,6 @@ describe('uri', () => {
     });
 
     it('validates uri with multiple schemes provided', () => {
-
         validate({ scheme: [/https?/, 'ftp', 'file', 'git+http'] }, [
             ['http://google.com', true],
             ['https://google.com', true],
@@ -185,7 +171,6 @@ describe('uri', () => {
     });
 
     it('validates relative uri', () => {
-
         validate({ allowRelative: true }, [
             ['foo://example.com:8042/over/there?name=ferret#nose', true],
             ['urn:example:animal:ferret:nose', true],
@@ -200,7 +185,7 @@ describe('uri', () => {
             ['file:///example.txt', true],
             ['http://asdf:qw%20er@localhost:8000?asdf=12345&asda=fc%2F#bacon', true],
             ['http://asdf@localhost:8000', true],
-            ['http://[v1.09azAZ-._~!$&\'()*+,;=:]', true],
+            ["http://[v1.09azAZ-._~!$&'()*+,;=:]", true],
             ['http://[a:b:c:d:e::1.2.3.4]', true],
             ['coap://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]', true],
             ['http://[1080:0:0:0:8:800:200C:417A]', true],
@@ -212,7 +197,7 @@ describe('uri', () => {
             ['file:///whatever', true],
             ['mailto:asdf@asdf.com', true],
             ['ftp://www.example.com', true],
-            ['javascript:alert(\'hello\');', true],                                     // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", true], // eslint-disable-line no-script-url
             ['xmpp:isaacschlueter@jabber.org', true],
             ['f://some.host/path', true],
             ['http://localhost:18/asdf', true],
@@ -242,7 +227,7 @@ describe('uri', () => {
             ['dash-test://foo/bar', true],
             ['xmpp:isaacschlueter@jabber.org', true],
             ['http://atpass:foo%40bar@127.0.0.1:8080/path?search=foo#bar', true],
-            ['javascript:alert(\'hello\');', true],                                     // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", true], // eslint-disable-line no-script-url
             ['file://localhost/etc/node/', true],
             ['file:///etc/node/', true],
             ['http://USER:PW@www.ExAmPlE.com/', true],
@@ -291,7 +276,6 @@ describe('uri', () => {
     });
 
     it('validates relative only uri', () => {
-
         validate({ relativeOnly: true }, [
             ['foo://example.com:8042/over/there?name=ferret#nose', false],
             ['urn:example:animal:ferret:nose', false],
@@ -306,7 +290,7 @@ describe('uri', () => {
             ['file:///example.txt', false],
             ['http://asdf:qw%20er@localhost:8000?asdf=12345&asda=fc%2F#bacon', false],
             ['http://asdf@localhost:8000', false],
-            ['http://[v1.09azAZ-._~!$&\'()*+,;=:]', false],
+            ["http://[v1.09azAZ-._~!$&'()*+,;=:]", false],
             ['http://[a:b:c:d:e::1.2.3.4]', false],
             ['coap://[FEDC:BA98:7654:3210:FEDC:BA98:7654:3210]', false],
             ['http://[1080:0:0:0:8:800:200C:417A]', false],
@@ -318,7 +302,7 @@ describe('uri', () => {
             ['file:///whatever', false],
             ['mailto:asdf@asdf.com', false],
             ['ftp://www.example.com', false],
-            ['javascript:alert(\'hello\');', false],                                        // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", false], // eslint-disable-line no-script-url
             ['xmpp:isaacschlueter@jabber.org', false],
             ['f://some.host/path', false],
             ['http://localhost:18/asdf', false],
@@ -348,7 +332,7 @@ describe('uri', () => {
             ['dash-test://foo/bar', false],
             ['xmpp:isaacschlueter@jabber.org', false],
             ['http://atpass:foo%40bar@127.0.0.1:8080/path?search=foo#bar', false],
-            ['javascript:alert(\'hello\');', false],                                        // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", false], // eslint-disable-line no-script-url
             ['file://localhost/etc/node/', false],
             ['file:///etc/node/', false],
             ['http://USER:PW@www.ExAmPlE.com/', false],
@@ -394,14 +378,10 @@ describe('uri', () => {
     });
 
     it('validates uri with square brackets allowed', () => {
-
-        validate({ allowQuerySquareBrackets: true }, [
-            ['https://example.com?abc[]=123&abc[]=456', true]
-        ]);
+        validate({ allowQuerySquareBrackets: true }, [['https://example.com?abc[]=123&abc[]=456', true]]);
     });
 
     it('captures domain', () => {
-
-        expect(Address.uri.regex({ domain: true }).raw).to.contain('@)?((?:');
+        expect(uriRegex({ domain: true }).raw).to.contain('@)?((?:');
     });
 });

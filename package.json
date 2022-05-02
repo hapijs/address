@@ -3,10 +3,13 @@
     "description": "Email address and domain validation",
     "version": "4.1.4",
     "repository": "git://github.com/sideway/address",
-    "main": "lib/index.js",
-    "types": "lib/index.d.ts",
+    "main": "./dist/index.js",
+    "module": "./esm/index.js",
+    "typings": "./dist/index.d.ts",
     "files": [
-        "lib"
+        "dist",
+        "src",
+        "esm"
     ],
     "keywords": [
         "email",
@@ -21,13 +24,21 @@
         "@hapi/hoek": "^10.0.0"
     },
     "devDependencies": {
-        "typescript": "4.6.x",
-        "@hapi/code": "8.x.x",
-        "@hapi/lab": "24.x.x"
+        "@hapi/code": "^9.0.0",
+        "@hapi/lab": "25.0.0-beta.1",
+        "@types/node": "^16.0.0",
+        "@typescript-eslint/eslint-plugin": "^5.21.0",
+        "@typescript-eslint/parser": "^5.21.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "prettier": "^2.6.2",
+        "typescript": "4.6.x"
     },
     "scripts": {
-        "test": "lab -a @hapi/code -t 100 -L -Y",
-        "test-cov-html": "lab -a @hapi/code -t 100 -L -r html -o coverage.html"
+        "test": "lab -t 100 -L",
+        "test-cov-html": "lab -t 100 -L -r html -o coverage.html",
+        "dist": "rm -rf dist/* && rm -rf esm/* && tsc --module commonjs --outdir dist && tsc --module es6 --outdir esm",
+        "format": "prettier --write '**/*.ts'"
     },
     "license": "BSD-3-Clause"
 }

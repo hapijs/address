@@ -1,44 +1,37 @@
-'use strict';
+import { expect } from '@hapi/code';
+import * as Lab from '@hapi/lab';
 
-const Address = require('..');
-const Code = require('@hapi/code');
-const Lab = require('@hapi/lab');
+import { ipRegex } from '../src';
 
-
-const internals = {};
-
-
-const { describe, it } = exports.lab = Lab.script();
-const expect = Code.expect;
-
+const { describe, it } = (exports.lab = Lab.script());
 
 describe('ip', () => {
-
     it('errors on invalid options', () => {
+        expect(() => ipRegex({ cidr: 'unknown' } as any)).to.throw(
+            'options.cidr must be one of required, optional, forbidden'
+        );
+        expect(() => ipRegex({ cidr: 1 } as any)).to.throw('options.cidr must be one of required, optional, forbidden');
 
-        expect(() => Address.ip.regex({ cidr: 'unknown' })).to.throw('options.cidr must be one of required, optional, forbidden');
-        expect(() => Address.ip.regex({ cidr: 1 })).to.throw('options.cidr must be a string');
-
-        expect(() => Address.ip.regex({ version: 1 })).to.throw('options.version must be a string or an array of string');
-        expect(() => Address.ip.regex({ version: [1] })).to.throw('options.version must only contain strings');
-        expect(() => Address.ip.regex({ version: [] })).to.throw('options.version must have at least 1 version specified');
-        expect(() => Address.ip.regex({ version: 'unknown' })).to.throw('options.version contains unknown version unknown - must be one of ipv4, ipv6, ipvfuture');
+        expect(() => ipRegex({ version: 1 } as any)).to.throw('options.version must be a string or an array of string');
+        expect(() => ipRegex({ version: [1] } as any)).to.throw('Invalid options.version value');
+        expect(() => ipRegex({ version: [] })).to.throw('options.version must have at least 1 version specified');
+        expect(() => ipRegex({ version: 'unknown' } as any)).to.throw(
+            'options.version contains unknown version unknown - must be one of ipv4, ipv6, ipvfuture'
+        );
     });
 
     it('normalizes options', () => {
+        expect(ipRegex().versions).to.equal(['ipv4', 'ipv6', 'ipvfuture']);
+        expect(ipRegex({ version: 'ipv4' }).versions).to.equal(['ipv4']);
 
-        expect(Address.ip.regex().versions).to.equal(['ipv4', 'ipv6', 'ipvfuture']);
-        expect(Address.ip.regex({ version: 'ipv4' }).versions).to.equal(['ipv4']);
-        expect(Address.ip.regex({ version: 'ipV4' }).versions).to.equal(['ipv4']);
-
-        expect(Address.ip.regex({ cidr: 'required' }).cidr).to.equal('required');
-        expect(Address.ip.regex({ cidr: 'REquired' }).cidr).to.equal('required');
-        expect(Address.ip.regex().cidr).to.equal('optional');
+        expect(ipRegex({ cidr: 'required' }).cidr).to.equal('required');
+        expect(ipRegex().cidr).to.equal('optional');
     });
 
     it('returns raw expression', () => {
-
-        expect(Address.ip.regex({ version: 'ipv4' }).raw).to.equal('(?:(?:(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.){3}(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])(?:\\/(?:\\d|[1-2]\\d|3[0-2]))?)');
+        expect(ipRegex({ version: 'ipv4' }).raw).to.equal(
+            '(?:(?:(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.){3}(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])(?:\\/(?:\\d|[1-2]\\d|3[0-2]))?)'
+        );
     });
 
     const invalidIPs = [
@@ -69,12 +62,7 @@ describe('ip', () => {
         'FEDC:BA98:7654:3210:FEDC:BA98:7654:3210/255'
     ];
 
-    const invalidIPvFutures = [
-        'v1.09#/33',
-        'v1.09#',
-        'v1.09azAZ-._~!$&\'()*+,;=:/129',
-        'v1.09azAZ-._~!$&\'()*+,;=:/255'
-    ];
+    const invalidIPvFutures = ['v1.09#/33', 'v1.09#', "v1.09azAZ-._~!$&'()*+,;=:/129", "v1.09azAZ-._~!$&'()*+,;=:/255"];
 
     const validIPv4sWithCidr = [
         '0.0.0.0/32',
@@ -164,18 +152,12 @@ describe('ip', () => {
         '7:6:5:4:3:2:1::'
     ];
 
-    const validIPvFuturesWithCidr = [
-        'v1.09azAZ-._~!$&\'()*+,;=:/32',
-        'v1.09azAZ-._~!$&\'()*+,;=:/128'
-    ];
+    const validIPvFuturesWithCidr = ["v1.09azAZ-._~!$&'()*+,;=:/32", "v1.09azAZ-._~!$&'()*+,;=:/128"];
 
-    const validIPvFuturesWithoutCidr = [
-        'v1.09azAZ-._~!$&\'()*+,;=:'
-    ];
+    const validIPvFuturesWithoutCidr = ["v1.09azAZ-._~!$&'()*+,;=:"];
 
     const validate = (options, pass, tests) => {
-
-        const { regex } = Address.ip.regex(options);
+        const { regex } = ipRegex(options);
 
         for (let i = 0; i < tests.length; ++i) {
             const ip = tests[i];
@@ -190,7 +172,6 @@ describe('ip', () => {
     };
 
     it('validates IP addresses with optional CIDR by default', () => {
-
         const options = {};
 
         validate(options, true, validIPv4sWithCidr);
@@ -206,7 +187,6 @@ describe('ip', () => {
     });
 
     it('validates IP addresses with an optional CIDR', () => {
-
         const options = { cidr: 'optional' };
 
         validate(options, true, validIPv4sWithCidr);
@@ -222,7 +202,6 @@ describe('ip', () => {
     });
 
     it('validates IP addresses with a required CIDR', () => {
-
         const options = { cidr: 'required' };
 
         validate(options, true, validIPv4sWithCidr);
@@ -237,24 +216,7 @@ describe('ip', () => {
         validate(options, false, invalidIPvFutures);
     });
 
-    it('validates IP addresses with a required CIDR (uppercase)', () => {
-
-        const options = { cidr: 'REQUIRED' };
-
-        validate(options, true, validIPv4sWithCidr);
-        validate(options, false, validIPv4sWithoutCidr);
-        validate(options, true, validIPv6sWithCidr);
-        validate(options, false, validIPv6sWithoutCidr);
-        validate(options, true, validIPvFuturesWithCidr);
-        validate(options, false, validIPvFuturesWithoutCidr);
-        validate(options, false, invalidIPs);
-        validate(options, false, invalidIPv4s);
-        validate(options, false, invalidIPv6s);
-        validate(options, false, invalidIPvFutures);
-    });
-
     it('validates IP addresses with a forbidden CIDR', () => {
-
         const options = { cidr: 'forbidden' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -270,7 +232,6 @@ describe('ip', () => {
     });
 
     it('validates ipv4 addresses with a default CIDR strategy', () => {
-
         const options = { version: 'ipv4' };
 
         validate(options, true, validIPv4sWithCidr);
@@ -285,24 +246,7 @@ describe('ip', () => {
         validate(options, false, invalidIPvFutures);
     });
 
-    it('validates ipv4 addresses with a default CIDR strategy (uppercase)', () => {
-
-        const options = { version: 'IPV4' };
-
-        validate(options, true, validIPv4sWithCidr);
-        validate(options, true, validIPv4sWithoutCidr);
-        validate(options, false, validIPv6sWithCidr);
-        validate(options, false, validIPv6sWithoutCidr);
-        validate(options, false, validIPvFuturesWithCidr);
-        validate(options, false, validIPvFuturesWithoutCidr);
-        validate(options, false, invalidIPs);
-        validate(options, false, invalidIPv4s);
-        validate(options, false, invalidIPv6s);
-        validate(options, false, invalidIPvFutures);
-    });
-
     it('validates ipv4 addresses with an optional CIDR', () => {
-
         const options = { version: 'ipv4' };
 
         validate(options, true, validIPv4sWithCidr);
@@ -318,7 +262,6 @@ describe('ip', () => {
     });
 
     it('validates ipv4 addresses with a required CIDR', () => {
-
         const options = { version: 'ipv4', cidr: 'required' };
 
         validate(options, true, validIPv4sWithCidr);
@@ -334,7 +277,6 @@ describe('ip', () => {
     });
 
     it('validates ipv4 addresses with a forbidden CIDR', () => {
-
         const options = { version: 'ipv4', cidr: 'forbidden' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -350,7 +292,6 @@ describe('ip', () => {
     });
 
     it('validates ipv6 addresses with a default CIDR strategy', () => {
-
         const options = { version: 'ipv6' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -366,7 +307,6 @@ describe('ip', () => {
     });
 
     it('validates ipv6 addresses with an optional CIDR', () => {
-
         const options = { version: 'ipv6', cidr: 'optional' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -382,7 +322,6 @@ describe('ip', () => {
     });
 
     it('validates ipv6 addresses with a required CIDR', () => {
-
         const options = { version: 'ipv6', cidr: 'required' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -398,7 +337,6 @@ describe('ip', () => {
     });
 
     it('validates ipv6 addresses with a forbidden CIDR', () => {
-
         const options = { version: 'ipv6', cidr: 'forbidden' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -414,7 +352,6 @@ describe('ip', () => {
     });
 
     it('validates ipvfuture addresses with a default CIDR strategy', () => {
-
         const options = { version: 'ipvfuture' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -430,7 +367,6 @@ describe('ip', () => {
     });
 
     it('validates ipvfuture addresses with an optional CIDR', () => {
-
         const options = { version: 'ipvfuture', cidr: 'optional' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -446,7 +382,6 @@ describe('ip', () => {
     });
 
     it('validates ipvfuture addresses with a required CIDR', () => {
-
         const options = { version: 'ipvfuture', cidr: 'required' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -462,7 +397,6 @@ describe('ip', () => {
     });
 
     it('validates ipvfuture addresses with a forbidden CIDR', () => {
-
         const options = { version: 'ipvfuture', cidr: 'forbidden' };
 
         validate(options, false, validIPv4sWithCidr);
@@ -478,7 +412,6 @@ describe('ip', () => {
     });
 
     it('validates ipv4 and ipv6 addresses with an optional CIDR', () => {
-
         const options = { version: ['ipv4', 'ipv6'], cidr: 'optional' };
 
         validate(options, true, validIPv4sWithCidr);
@@ -494,7 +427,6 @@ describe('ip', () => {
     });
 
     it('validates ipv4 and ipv6 addresses with a required CIDR', () => {
-
         const options = { version: ['ipv4', 'ipv6'], cidr: 'required' };
 
         validate(options, true, validIPv4sWithCidr);
@@ -510,7 +442,6 @@ describe('ip', () => {
     });
 
     it('validates ipv4 and ipv6 addresses with a forbidden CIDR', () => {
-
         const options = { version: ['ipv4', 'ipv6'], cidr: 'forbidden' };
 
         validate(options, false, validIPv4sWithCidr);

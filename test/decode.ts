@@ -1,21 +1,12 @@
-'use strict';
+import { expect } from '@hapi/code';
+import * as Lab from '@hapi/lab';
 
-const Address = require('..');
-const Code = require('@hapi/code');
-const Lab = require('@hapi/lab');
+import { uriDecode } from '../src';
 
-
-const internals = {};
-
-
-const { describe, it } = exports.lab = Lab.script();
-const expect = Code.expect;
-
+const { describe, it } = (exports.lab = Lab.script());
 
 describe('uri.decode()', () => {
-
     it('decodes URI strings', () => {
-
         const strings = [
             '',
             'abcd',
@@ -37,12 +28,11 @@ describe('uri.decode()', () => {
         ];
 
         for (const string of strings) {
-            expect(Address.uri.decode(string)).to.equal(decodeURIComponent(string));
+            expect(uriDecode(string)).to.equal(decodeURIComponent(string));
         }
     });
 
     it('handles invalid strings', () => {
-
         const strings = [
             '%',
             '%2',
@@ -85,18 +75,17 @@ describe('uri.decode()', () => {
 
         for (const string of strings) {
             expect(() => decodeURIComponent(string)).to.throw();
-            expect(Address.uri.decode(string)).to.be.null();
+            expect(uriDecode(string)).to.be.null();
         }
     });
 
     it('decodes every character', () => {
-
         const chars = [];
         for (let i = 0; i < 256; ++i) {
             chars.push(encodeURI(String.fromCharCode(i)));
         }
 
         const string = chars.join('a1$#');
-        expect(Address.uri.decode(string)).to.equal(decodeURIComponent(string));
+        expect(uriDecode(string)).to.equal(decodeURIComponent(string));
     });
 });
