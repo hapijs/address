@@ -121,9 +121,7 @@ function validateLocal(local: string, ascii: boolean) {
 }
 
 function toBinary(char: string) {
-    return Array.from(ENCODER_IMPL.encode(char))
-        .map((v) => String.fromCharCode(v))
-        .join('');
+    return Array.from(ENCODER_IMPL.encode(char), (v) => String.fromCharCode(v)).join('');
 }
 
 /*

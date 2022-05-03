@@ -1,4 +1,4 @@
-export const errorCodes: Record<string, string> = {
+export const errorCodes = {
     EMPTY_STRING: 'Address must be a non-empty string',
     FORBIDDEN_UNICODE: 'Address contains forbidden Unicode characters',
     MULTIPLE_AT_CHAR: 'Address cannot contain more than one @ character',
@@ -20,6 +20,6 @@ export const errorCodes: Record<string, string> = {
     DOMAIN_LONG_SEGMENT: 'Domain contains dot-separated segment that is too long'
 };
 
-export function errorCode(code: string) {
+export function errorCode<TCode extends keyof typeof errorCodes>(code: TCode) {
     return { code, error: errorCodes[code] };
 }
