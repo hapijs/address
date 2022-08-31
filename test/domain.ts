@@ -101,7 +101,14 @@ describe('domain', () => {
                 ['example.com%2e', false],
                 ['example.com.', false],
                 ['example.com.', true, { allowFullyQualified: true }],
-                ['example.com', true, { allowFullyQualified: true }]
+                ['example.com', true, { allowFullyQualified: true }],
+                ['_acme-challenge.example.com', false],
+                ['_acme-challenge.example.com', true, { allowUnderscore: true }],
+                ['_acme-challenge.example.com', false, { allowUnderscore: false }],
+                ['_abc.example.com', true, { allowUnderscore: true }],
+                ['_abc.example.com', false],
+                ['_example.com', true, { allowUnderscore: true }],
+                ['_example.com', false]
             ];
 
             for (let i = 0; i < tests.length; ++i) {
