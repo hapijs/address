@@ -108,7 +108,8 @@ describe('domain', () => {
                 ['_abc.example.com', true, { allowUnderscore: true }],
                 ['_abc.example.com', false],
                 ['_example.com', true, { allowUnderscore: true }],
-                ['_example.com', false]
+                ['_example.com', false],
+                ['_abc.{example}.com', false, { allowUnderscore: true }]
             ];
 
             for (let i = 0; i < tests.length; ++i) {
