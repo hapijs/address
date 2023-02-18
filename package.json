@@ -1,8 +1,8 @@
 {
-    "name": "@sideway/address",
+    "name": "@hapi/address",
     "description": "Email address and domain validation",
     "version": "5.0.0",
-    "repository": "git://github.com/sideway/address",
+    "repository": "git://github.com/hapijs/address",
     "main": "./dist/index.js",
     "module": "./esm/index.js",
     "typings": "./dist/index.d.ts",
@@ -21,18 +21,18 @@
         "node": ">=14.0.0"
     },
     "dependencies": {
-        "@hapi/hoek": "^10.0.0"
+        "@hapi/hoek": "^11.0.2"
     },
     "devDependencies": {
-        "@hapi/code": "^9.0.0",
-        "@hapi/lab": "25.0.0-beta.1",
-        "@types/node": "^16.0.0",
-        "@typescript-eslint/eslint-plugin": "^5.21.0",
-        "@typescript-eslint/parser": "^5.21.0",
-        "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-prettier": "^4.0.0",
-        "prettier": "^2.6.2",
-        "typescript": "4.6.x"
+        "@hapi/code": "^9.0.3",
+        "@hapi/lab": "^25.1.2",
+        "@types/node": "^14.18.36",
+        "@typescript-eslint/eslint-plugin": "^5.52.0",
+        "@typescript-eslint/parser": "^5.52.0",
+        "eslint-config-prettier": "^8.6.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "prettier": "^2.8.4",
+        "typescript": "4.9.x"
     },
     "scripts": {
         "test": "lab -t 100 -L",
