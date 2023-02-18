@@ -59,7 +59,7 @@ describe('uri', () => {
             ['file:///whatever', true],
             ['mailto:asdf@asdf.com', true],
             ['ftp://www.example.com', true],
-            ["javascript:alert('hello');", true], // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", true],
             ['xmpp:isaacschlueter@jabber.org', true],
             ['f://some.host/path', true],
             ['http://localhost:18/asdf', true],
@@ -91,7 +91,7 @@ describe('uri', () => {
             ['dash-test://foo/bar', true],
             ['xmpp:isaacschlueter@jabber.org', true],
             ['http://atpass:foo%40bar@127.0.0.1:8080/path?search=foo#bar', true],
-            ["javascript:alert('hello');", true], // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", true],
             ['file://localhost/etc/node/', true],
             ['file:///etc/node/', true],
             ['http://USER:PW@www.ExAmPlE.com/', true],
@@ -197,7 +197,7 @@ describe('uri', () => {
             ['file:///whatever', true],
             ['mailto:asdf@asdf.com', true],
             ['ftp://www.example.com', true],
-            ["javascript:alert('hello');", true], // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", true],
             ['xmpp:isaacschlueter@jabber.org', true],
             ['f://some.host/path', true],
             ['http://localhost:18/asdf', true],
@@ -227,7 +227,7 @@ describe('uri', () => {
             ['dash-test://foo/bar', true],
             ['xmpp:isaacschlueter@jabber.org', true],
             ['http://atpass:foo%40bar@127.0.0.1:8080/path?search=foo#bar', true],
-            ["javascript:alert('hello');", true], // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", true],
             ['file://localhost/etc/node/', true],
             ['file:///etc/node/', true],
             ['http://USER:PW@www.ExAmPlE.com/', true],
@@ -302,7 +302,7 @@ describe('uri', () => {
             ['file:///whatever', false],
             ['mailto:asdf@asdf.com', false],
             ['ftp://www.example.com', false],
-            ["javascript:alert('hello');", false], // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", false],
             ['xmpp:isaacschlueter@jabber.org', false],
             ['f://some.host/path', false],
             ['http://localhost:18/asdf', false],
@@ -332,7 +332,7 @@ describe('uri', () => {
             ['dash-test://foo/bar', false],
             ['xmpp:isaacschlueter@jabber.org', false],
             ['http://atpass:foo%40bar@127.0.0.1:8080/path?search=foo#bar', false],
-            ["javascript:alert('hello');", false], // eslint-disable-line no-script-url
+            ["javascript:alert('hello');", false],
             ['file://localhost/etc/node/', false],
             ['file:///etc/node/', false],
             ['http://USER:PW@www.ExAmPlE.com/', false],
