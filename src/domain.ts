@@ -7,6 +7,7 @@ const NON_ASCII_RX = /[^\x00-\x7f]/;
 const DOMAIN_CONTROL_RX = /[\x00-\x20@\:\/\\#!\$&\'\(\)\*\+,;=\?]/; // Control + space + separators
 const TLD_SEGMENT_RX = /^[a-zA-Z](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/;
 const DOMAIN_SEGMENT_RX = /^[a-zA-Z0-9](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/;
+const DOMAIN_UNDERSCORE_SEGMENT_RX = /^[a-zA-Z0-9_](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/;
 const URL_IMPL = Url.URL || URL; // $lab:coverage:ignore$
 
 interface TldsAllow {
@@ -28,6 +29,13 @@ export interface DomainOptions {
      * @default true
      */
     readonly allowUnicode?: boolean;
+
+    /**
+     * Determines whether underscore (_) characters are allowed.
+     *
+     * @default false
+     */
+    readonly allowUnderscore?: boolean;
 
     /**
      * The maximum number of domain segments (e.g. `x.y.z` has 3 segments) allowed.
@@ -151,8 +159,14 @@ export function analyzeDomain(domain: string, options: DomainOptions = {}): Anal
         }
 
         if (i < segments.length - 1) {
-            if (!DOMAIN_SEGMENT_RX.test(segment)) {
-                return errorCode('DOMAIN_INVALID_CHARS');
+            if (options.allowUnderscore) {
+                if (!DOMAIN_UNDERSCORE_SEGMENT_RX.test(segment)) {
+                    return errorCode('DOMAIN_INVALID_CHARS');
+                }
+            } else {
+                if (!DOMAIN_SEGMENT_RX.test(segment)) {
+                    return errorCode('DOMAIN_INVALID_CHARS');
+                }
             }
         } else {
             if (!TLD_SEGMENT_RX.test(segment)) {
