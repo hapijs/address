@@ -1,7 +1,7 @@
 {
   "name": "@hapi/address",
   "description": "Email address and domain validation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "repository": "git://github.com/hapijs/address",
   "engines": {
     "node": ">=6.0.0"
