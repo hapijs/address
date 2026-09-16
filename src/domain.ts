@@ -5,9 +5,12 @@ import { errorCode } from './errors';
 const MIN_DOMAIN_SEGMENTS = 2;
 const NON_ASCII_RX = /[^\x00-\x7f]/;
 const DOMAIN_CONTROL_RX = /[\x00-\x20@\:\/\\#!\$&\'\(\)\*\+,;=\?]/; // Control + space + separators
+const DOMAIN_CONTROL_NO_FORWARD_SLASH_RX = /[\x00-\x20@\:\\#!\$&\'\(\)\*\+,;=\?]/; // Control + space + separators without /
 const TLD_SEGMENT_RX = /^[a-zA-Z](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/;
 const DOMAIN_SEGMENT_RX = /^[a-zA-Z0-9](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/;
 const DOMAIN_UNDERSCORE_SEGMENT_RX = /^[a-zA-Z0-9_](?:[a-zA-Z0-9\-]*[a-zA-Z0-9])?$/;
+const DOMAIN_FORWARD_SLASH_SEGMENT_RX = /^[a-zA-Z0-9](?:[a-zA-Z0-9\-\/]*[a-zA-Z0-9])?$/;
+const DOMAIN_UNDERSCORE_FORWARD_SLASH_SEGMENT_RX = /^[a-zA-Z0-9_](?:[a-zA-Z0-9\-\/]*[a-zA-Z0-9])?$/;
 const URL_IMPL = Url.URL || URL; // $lab:coverage:ignore$
 
 interface TldsAllow {
@@ -36,6 +39,13 @@ export interface DomainOptions {
      * @default false
      */
     readonly allowUnderscore?: boolean;
+
+    /**
+     * Determines whether forward slash (/) characters are allowed.
+     *
+     * @default false
+     */
+    readonly allowForwardSlash?: boolean;
 
     /**
      * The maximum number of domain segments (e.g. `x.y.z` has 3 segments) allowed.
@@ -110,11 +120,12 @@ export function analyzeDomain(domain: string, options: DomainOptions = {}): Anal
         domain = domain.normalize('NFC');
     }
 
-    if (DOMAIN_CONTROL_RX.test(domain)) {
+    const controlRx = options.allowForwardSlash ? DOMAIN_CONTROL_NO_FORWARD_SLASH_RX : DOMAIN_CONTROL_RX;
+    if (controlRx.test(domain)) {
         return errorCode('DOMAIN_INVALID_CHARS');
     }
 
-    domain = punycode(domain);
+    domain = punycode(domain, options.allowForwardSlash);
 
     // https://tools.ietf.org/html/rfc1035 section 2.3.1
 
@@ -160,11 +171,15 @@ export function analyzeDomain(domain: string, options: DomainOptions = {}): Anal
 
         if (i < segments.length - 1) {
             if (options.allowUnderscore) {
-                if (!DOMAIN_UNDERSCORE_SEGMENT_RX.test(segment)) {
+                const segmentRx = options.allowForwardSlash
+                    ? DOMAIN_UNDERSCORE_FORWARD_SLASH_SEGMENT_RX
+                    : DOMAIN_UNDERSCORE_SEGMENT_RX;
+                if (!segmentRx.test(segment)) {
                     return errorCode('DOMAIN_INVALID_CHARS');
                 }
             } else {
-                if (!DOMAIN_SEGMENT_RX.test(segment)) {
+                const segmentRx = options.allowForwardSlash ? DOMAIN_FORWARD_SLASH_SEGMENT_RX : DOMAIN_SEGMENT_RX;
+                if (!segmentRx.test(segment)) {
                     return errorCode('DOMAIN_INVALID_CHARS');
                 }
             }
@@ -190,15 +205,31 @@ export function isDomainValid(domain: string, options?: DomainOptions) {
     return !analyzeDomain(domain, options);
 }
 
-function punycode(domain: string) {
-    if (domain.includes('%')) {
-        domain = domain.replace(/%/g, '%25');
+function punycode(domain: string, allowForwardSlash?: boolean) {
+    if (allowForwardSlash) {
+        return domain
+            .split('.')
+            .map((segment) =>
+                segment
+                    .split('/')
+                    .map((part) => punycodePart(part))
+                    .join('/')
+            )
+            .join('.');
+    }
+
+    return punycodePart(domain);
+}
+
+function punycodePart(part: string) {
+    if (part.includes('%')) {
+        part = part.replace(/%/g, '%25');
     }
 
     try {
-        return new URL_IMPL(`http://${domain}`).host;
+        return new URL_IMPL(`http://${part}`).host;
     } catch (err) {
-        return domain;
+        return part;
     }
 }
 

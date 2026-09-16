@@ -357,6 +357,7 @@ describe('email', () => {
                 ],
                 ['test@example.com@example.com', false],
                 ['test@example.com/path', false],
+                ['test/path@example.com', true, { allowForwardSlash: true }],
                 ['test@example.com:123', false],
                 ['test@example.com_', false],
                 ['test@example.com\\', false],
