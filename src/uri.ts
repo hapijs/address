@@ -23,11 +23,10 @@ function generate() {
     const hexDigit = '\\dA-Fa-f'; // HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
     const hexDigitOnly = '[' + hexDigit + ']';
 
-    const unreserved = '\\w-\\.~'; // unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
+    const unreserved = '\\w\\-\\.~'; // unreserved = ALPHA / DIGIT / "-" / "." / "_" / "~"
     const subDelims = "!\\$&'\\(\\)\\*\\+,;="; // sub-delims = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
-    const pctEncoded = '%' + hexDigit; // pct-encoded = "%" HEXDIG HEXDIG
-    const pchar = unreserved + pctEncoded + subDelims + ':@'; // pchar = unreserved / pct-encoded / sub-delims / ":" / "@"
-    const pcharOnly = '[' + pchar + ']';
+    const pctEncoded = '%' + hexDigitOnly + '{2}'; // pct-encoded = "%" HEXDIG HEXDIG
+    const pchar = '(?:[' + unreserved + subDelims + ':@]|' + pctEncoded + ')'; // pchar = unreserved / pct-encoded / sub-delims / ":" / "@"
     const decOctect = '(?:0{0,2}\\d|0?[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])'; // dec-octet = DIGIT / %x31-39 DIGIT / "1" 2DIGIT / "2" %x30-34 DIGIT / "25" %x30-35  ; 0-9 / 10-99 / 100-199 / 200-249 / 250-255
 
     rfc3986.ipv4address = '(?:' + decOctect + '\\.){3}' + decOctect; // IPv4address = dec-octet "." dec-octet "." dec-octet "." dec-octet
@@ -82,12 +81,12 @@ function generate() {
         ')';
     rfc3986.ipvFuture = 'v' + hexDigitOnly + '+\\.[' + unreserved + subDelims + ':]+'; // IPvFuture = "v" 1*HEXDIG "." 1*( unreserved / sub-delims / ":" )
 
-    rfc3986.scheme = '[a-zA-Z][a-zA-Z\\d+-\\.]*'; // scheme = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
+    rfc3986.scheme = '[a-zA-Z][a-zA-Z\\d+\\-\\.]*'; // scheme = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
     rfc3986.schemeRegex = new RegExp(rfc3986.scheme);
 
-    const userinfo = '[' + unreserved + pctEncoded + subDelims + ':]*'; // userinfo = *( unreserved / pct-encoded / sub-delims / ":" )
+    const userinfo = '(?:[' + unreserved + subDelims + ':]|' + pctEncoded + ')*'; // userinfo = *( unreserved / pct-encoded / sub-delims / ":" )
     const IPLiteral = '\\[(?:' + rfc3986.ipv6address + '|' + rfc3986.ipvFuture + ')\\]'; // IP-literal = "[" ( IPv6address / IPvFuture  ) "]"
-    const regName = '[' + unreserved + pctEncoded + subDelims + ']{1,255}'; // reg-name = *( unreserved / pct-encoded / sub-delims )
+    const regName = '(?:[' + unreserved + subDelims + ']|' + pctEncoded + '){1,255}'; // reg-name = *( unreserved / pct-encoded / sub-delims )
     const host = '(?:' + IPLiteral + '|' + rfc3986.ipv4address + '|' + regName + ')'; // host = IP-literal / IPv4address / reg-name
     const port = '\\d*'; // port = *DIGIT
     const authority = '(?:' + userinfo + '@)?' + host + '(?::' + port + ')?'; // authority   = [ userinfo "@" ] host [ ":" port ]
@@ -106,9 +105,9 @@ function generate() {
         path-rootless = segment-nz *( "/" segment )
     */
 
-    const segment = pcharOnly + '*';
-    const segmentNz = pcharOnly + '+';
-    const segmentNzNc = '[' + unreserved + pctEncoded + subDelims + '@' + ']+';
+    const segment = pchar + '*';
+    const segmentNz = pchar + '+';
+    const segmentNzNc = '(?:[' + unreserved + subDelims + '@]|' + pctEncoded + ')+';
     const pathEmpty = '';
     const pathAbEmpty = '(?:\\/' + segment + ')*';
     const pathAbsolute = '\\/(?:' + segmentNz + pathAbEmpty + ')?';
@@ -166,12 +165,12 @@ function generate() {
     // query = *( pchar / "/" / "?" )
     // query = *( pchar / "[" / "]" / "/" / "?" )
 
-    rfc3986.query = '[' + pchar + '\\/\\?]*(?=#|$)'; //Finish matching either at the fragment part '|' end of the line.
-    rfc3986.queryWithSquareBrackets = '[' + pchar + '\\[\\]\\/\\?]*(?=#|$)';
+    rfc3986.query = '(?:[' + unreserved + subDelims + ':@\\/\\?]|' + pctEncoded + ')*(?=#|$)'; //Finish matching either at the fragment part '|' end of the line.
+    rfc3986.queryWithSquareBrackets = '(?:[' + unreserved + subDelims + ':@\\[\\]\\/\\?]|' + pctEncoded + ')*(?=#|$)';
 
     // fragment = *( pchar / "/" / "?" )
 
-    rfc3986.fragment = '[' + pchar + '\\/\\?]*';
+    rfc3986.fragment = '(?:[' + unreserved + subDelims + ':@\\/\\?]|' + pctEncoded + ')*';
 
     return rfc3986;
 }

@@ -135,7 +135,12 @@ describe('uri', () => {
             ['http://a\r" \t\n<\'b:b@c\r\nd/e?f', false],
             ['/absolute', false],
             ['http:/example.com', false],
-            ['http:example.com', false]
+            ['http:example.com', false],
+            ['http://example.com/%6G', false],
+            ['http://example.com/%', false],
+            ['http://a/?%', false],
+            ['http://exa%mple.com/', false],
+            ['bar,baz:foo', false]
         ]);
     });
 
