@@ -87,7 +87,7 @@ function generate() {
 
     const userinfo = '[' + unreserved + pctEncoded + subDelims + ':]*'; // userinfo = *( unreserved / pct-encoded / sub-delims / ":" )
     const IPLiteral = '\\[(?:' + rfc3986.ipv6address + '|' + rfc3986.ipvFuture + ')\\]'; // IP-literal = "[" ( IPv6address / IPvFuture  ) "]"
-    const regName = '[' + unreserved + pctEncoded + subDelims + ']{1,255}'; // reg-name = *( unreserved / pct-encoded / sub-delims )
+    const regName = '[' + unreserved + pctEncoded + subDelims + ']{0,255}'; // reg-name = *( unreserved / pct-encoded / sub-delims )
     const host = '(?:' + IPLiteral + '|' + rfc3986.ipv4address + '|' + regName + ')'; // host = IP-literal / IPv4address / reg-name
     const port = '\\d*'; // port = *DIGIT
     const authority = '(?:' + userinfo + '@)?' + host + '(?::' + port + ')?'; // authority   = [ userinfo "@" ] host [ ":" port ]
@@ -116,7 +116,7 @@ function generate() {
     const pathNoScheme = segmentNzNc + pathAbEmpty;
     const pathAbNoAuthority = '(?:\\/\\/\\/' + segment + pathAbEmpty + ')'; // Used by file:///
 
-    // hier-part = "//" authority path
+    // hier-part = "//" authority path-abempty / path-absolute / path-rootless / path-empty
 
     rfc3986.hierPart =
         '(?:' +
@@ -130,9 +130,22 @@ function generate() {
         pathRootless +
         '|' +
         pathAbNoAuthority +
+        '|' +
+        pathEmpty +
         ')';
     rfc3986.hierPartCapture =
-        '(?:' + '(?:\\/\\/' + authorityCapture + pathAbEmpty + ')' + '|' + pathAbsolute + '|' + pathRootless + ')';
+        '(?:' +
+        '(?:\\/\\/' +
+        authorityCapture +
+        pathAbEmpty +
+        ')' +
+        '|' +
+        pathAbsolute +
+        '|' +
+        pathRootless +
+        '|' +
+        pathEmpty +
+        ')';
 
     // relative-part = "//" authority path-abempty / path-absolute / path-noscheme / path-empty
 
@@ -255,7 +268,7 @@ interface Expression {
 }
 
 function wrap(raw: string, scheme: string = null): Expression {
-    raw = `(?=.)(?!https?\:/(?:$|[^/]))(?!https?\:///)(?!https?\:[^/])${raw}`; // Require at least one character and explicitly forbid 'http:/' or HTTP with empty domain
+    raw = `(?=.)(?!https?\\://(?:$|/|\\?|#))(?!https?\\:/(?:$|[^/]))(?!https?\\:///)(?!https?\\:[^/])${raw}`; // Require at least one character and explicitly forbid 'http:/' or HTTP with empty domain
 
     return {
         raw,
