@@ -28,6 +28,9 @@ describe('uri', () => {
 
     it('validates uri', () => {
         validate({}, [
+            ['com.example.myapp://', true],
+            ['myapp://?ref=x', true],
+            ['myapp:', true],
             ['foo://example.com:8042/over/there?name=ferret#nose', true],
             ['https://example.com?abc[]=123&abc[]=456', false],
             ['urn:example:animal:ferret:nose', true],
